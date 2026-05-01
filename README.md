@@ -9,6 +9,36 @@
 
 ---
 
+## What is EPAC?
+
+EPAC is a Python framework for running agentic AI workflows that actually produce reliable outputs.
+
+You define what success looks like. Four roles do the work:
+
+```
+Expert → Planner → Actor ↔ Critic → Expert
+```
+
+- **Expert** (you): writes a typed spec with acceptance criteria, sets the risk level, approves the plan and the final output
+- **Planner** (AI): turns the spec into a concrete, ordered task plan — no code, just structure
+- **Actor** (AI): executes the plan and produces the output
+- **Critic** (AI, different model): independently reviews the Actor's output against the original spec, returns specific feedback if it falls short
+- The Actor-Critic loop repeats until the output passes or escalates to you
+
+The loop is the point. A single-shot prompt gives you one attempt. EPAC gives you structured iteration where each pass is grounded in your original definition of success, reviewed by an agent with no stake in the Actor's approach.
+
+**Why developers care:** drop-in Python library, LangGraph orchestration, LiteLLM for any model provider, Pydantic v2 typed artifacts, CLI included. One command to turn a prompt into a spec: `epac spec init`.
+
+**Why decision makers care:** every run produces versioned artifacts at each stage, human approval gates before work starts and before output is used, and a full audit trail of what the agents did and why. You know what you got and how you got it.
+
+```bash
+pip install "epac[langgraph,litellm]"
+epac spec init  # turns your prompt into a typed spec
+epac run        # runs the full pipeline
+```
+
+---
+
 ## Table of Contents
 
 1. [The Agentic AI Problem](#chapter-1-the-agentic-ai-problem)
