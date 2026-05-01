@@ -7,6 +7,8 @@
 
 *Structure your agentic workflows to produce better outputs through iteration and human judgment*
 
+> **Status: Concept / Early Development.** EPAC is not production-ready. The framework is under active development and the API will change. Use it to explore the pattern, build on the ideas, or contribute — not to run production workloads.
+
 ---
 
 ## What is EPAC?
