@@ -39,6 +39,87 @@ epac run        # runs the full pipeline
 
 ---
 
+## Quickstart
+
+**Requirements:**
+- Python 3.11+
+- API keys for at least one LLM provider. Two providers are recommended: one for the Actor (does the work), one for the Critic (reviews the work). Using different providers catches more errors.
+
+**Install:**
+
+```bash
+pip install "epac[langgraph,litellm]"
+```
+
+**Set your API keys** (use whichever providers you have):
+
+```bash
+# Anthropic (recommended default)
+export ANTHROPIC_API_KEY=sk-ant-...
+
+# OpenAI
+export OPENAI_API_KEY=sk-...
+
+# Google
+export GOOGLE_API_KEY=...
+
+# Any other LiteLLM-compatible provider works too
+```
+
+**Turn a prompt into a spec:**
+
+```bash
+epac spec init
+# paste or describe your task — EPAC extracts structure and asks for what it can't infer
+# outputs a validated YAML spec file
+```
+
+Or skip the wizard and write one directly (see [Chapter 3](#chapter-3-the-expert-role) for the full schema).
+
+**Run the pipeline:**
+
+```python
+import asyncio
+from epac import EPACPipeline, EPACConfig
+from epac.artifacts import EPACSpec
+from epac.artifacts.spec import AcceptanceCriterion, RiskLevel
+
+async def main():
+    spec = EPACSpec(
+        created_by="you@example.com",
+        title="Add rate limiting to the API",
+        goal="Implement per-client rate limiting using Redis.",
+        acceptance_criteria=[
+            AcceptanceCriterion(
+                given="a client sends 101 requests in 60 seconds",
+                when="using the same API key",
+                then="the 101st request returns HTTP 429",
+            )
+        ],
+        risk_level=RiskLevel.MEDIUM,
+    )
+    config = EPACConfig(
+        llm_model="anthropic/claude-haiku-4-5",          # Actor: fast, cheap
+        critic_llm_model="anthropic/claude-sonnet-4-5",  # Critic: more thorough
+    )
+    pipeline = EPACPipeline(config=config)
+    result = await pipeline.run(spec=spec)
+    print(f"Status: {result.status}")
+
+asyncio.run(main())
+```
+
+The pipeline will pause at Gate 1 (approve the plan) and Gate 2 (approve the output) and prompt you in the terminal.
+
+**Optional extras:**
+
+```bash
+pip install "epac[github]"   # GitHub PR integration
+pip install "epac[all]"      # everything including SAST tools (bandit, semgrep)
+```
+
+---
+
 ## Table of Contents
 
 1. [The Agentic AI Problem](#chapter-1-the-agentic-ai-problem)
