@@ -831,21 +831,28 @@ If you use EPAC in research or write about it, please cite:
   author  = {Thomason, James},
   title   = {EPAC: Expert-Planner-Actor-Critic Framework for Enterprise Agentic AI},
   year    = {2026},
-  url     = {https://github.com/thomason-io/epac},
+  url     = {https://github.com/jthomason/epac},
   license = {Apache-2.0}
 }
 ```
 
 ---
 
-## Related Work
+## Prior Work and Inspiration
 
-EPAC builds on and acknowledges:
+The Actor-Critic loop at the core of EPAC is grounded in established research, not invented here.
+
+**Actor-Critic architectures (Konda & Tsitsiklis, NeurIPS 1999)** introduced the two-timescale actor-critic framework for reinforcement learning that underlies the general pattern of separating a policy agent (Actor) from an evaluator (Critic) that provides feedback to improve it.
+
+**PACMAN (Lyu et al., 2019)** — "A Human-Centered Data-Driven Planner-Actor-Critic Architecture via Logic Programming" — extended the pattern by adding a Planner role and a human feedback loop to a hybrid symbolic-RL system. This is the direct architectural ancestor of EPAC's three-role AI structure.
+
+**Gao & Juluri (arXiv:2601.05016, 2026)** applied the Planner-Actor-Critic pattern to LLM agents for 3D modeling and found that structured iteration consistently outperformed single-shot prompting on geometric accuracy, aesthetic quality, and task completion. EPAC generalizes this finding to any domain where acceptance criteria can be written up front.
+
+EPAC also builds on:
 - Andrew Ng's [four agentic design patterns](https://www.deeplearning.ai/the-batch/agentic-design-patterns-part-1-reflection/) (Reflection, Tool Use, Planning, Multi-Agent)
 - [LangGraph](https://github.com/langchain-ai/langgraph) for stateful, HITL-capable orchestration
-- [AGENTS.md](https://github.com/agentdotmd/agents.md) for Expert specification conventions
 - [OWASP Top 10 for Agentic Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/) for Critic security requirements
-- Hohpe & Woolf's *Enterprise Integration Patterns* as the methodological predecessor
+- Hohpe & Woolf's *Enterprise Integration Patterns* as a methodological reference
 
 ---
 
@@ -855,4 +862,4 @@ EPAC builds on and acknowledges:
 
 ---
 
-*EPAC Framework Documentation. All typed artifacts are Pydantic models. All pipeline runs produce immutable, hash-chained audit trails. AI systems are Responsible. Humans are Accountable.*
+*EPAC Framework Documentation. Better outputs through structured iteration. Auditability and governance as natural consequences.*
