@@ -1,0 +1,103 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "epac"
+version = "0.1.4"
+description = "Expert-Planner-Actor-Critic: an open-source framework for governed, auditable enterprise agentic AI pipelines"
+readme = "README.md"
+license = { text = "Apache-2.0" }
+authors = [{ name = "James Thomason", email = "james@thomason.io" }]
+keywords = [
+    "agentic-ai",
+    "multi-agent",
+    "llm",
+    "enterprise",
+    "human-in-the-loop",
+    "langgraph",
+    "epac",
+]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: Apache Software License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.11"
+dependencies = [
+    "pydantic>=2.6",
+    "anyio>=4.0",          # async primitives
+]
+
+[project.optional-dependencies]
+# LLM providers (pick one or both)
+litellm  = ["litellm>=1.40"]
+openai   = ["openai>=1.30"]
+
+# LangGraph orchestration (recommended)
+langgraph = ["langgraph>=0.2", "langgraph-checkpoint>=1.0"]
+
+# GitHub integration
+github = [
+    "PyGithub>=2.3",
+    "aiohttp>=3.9",
+]
+
+# Static analysis tools
+sast = ["bandit>=1.7", "semgrep>=1.70"]
+
+# Full installation
+all = [
+    "epac[litellm,openai,langgraph,github,sast]",
+]
+
+# Development
+dev = [
+    "pytest>=8.0",
+    "pytest-asyncio>=0.23",
+    "pytest-cov>=5.0",
+    "ruff>=0.4",
+    "mypy>=1.10",
+    "pre-commit>=3.7",
+    "epac[all]",
+]
+
+[project.urls]
+Homepage      = "https://github.com/thomason-io/epac"
+Documentation = "https://epac.dev"
+Repository    = "https://github.com/thomason-io/epac"
+Issues        = "https://github.com/thomason-io/epac/issues"
+Changelog     = "https://github.com/thomason-io/epac/blob/main/CHANGELOG.md"
+
+[project.scripts]
+epac = "epac.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["epac"]
+
+# ── Ruff ─────────────────────────────────────────────────────────────────────
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "N", "W", "UP", "BLE", "C4", "SIM"]
+ignore = ["E501"]
+
+# ── Pytest ────────────────────────────────────────────────────────────────────
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths    = ["tests"]
+addopts      = "-v --tb=short"
+collect_ignore_glob = ["epac/**"]
+
+# ── Mypy ──────────────────────────────────────────────────────────────────────
+[tool.mypy]
+python_version        = "3.11"
+strict                = false
+ignore_missing_imports = true
